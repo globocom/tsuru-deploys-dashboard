@@ -12,6 +12,10 @@ tsuru_token = ENV["TSURU_TOKEN"]
 SCHEDULER.every '10s' do
 	deploy_dates = Array.new
   http = Net::HTTP.new tsuru_server, tsuru_port
+  if tsuru_port == "443"
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+  end
 	req = Net::HTTP::Get.new("/deploys")
 	req.add_field "Authorization", "bearer #{tsuru_token}"
 	response = http.request(req)
