@@ -1,1 +1,1 @@
-git@github.com:globocom/tsuru-deploys-dashboard.git
+web: bundle exec unicorn -l 0.0.0.0:8888
