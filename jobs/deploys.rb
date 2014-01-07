@@ -22,7 +22,7 @@ SCHEDULER.every '10s' do
 	deploys = JSON.parse response.body
   deploys.each do |deploy|
   time = DateTime.strptime deploy["Timestamp"],  "%Y-%m-%dT%H:%M:%S.%L%z"
-  	deploy_dates.push({label: deploy["App"], value: time.strftime("%d/%m/%y  %H:%M:%S")})
+  	deploy_dates.push({label: deploy["App"], value: time.strftime("%d/%m/%y  %H:%M:%S"), value: deploy["Duration"]})
   end
   send_event('deploys', { items: deploy_dates })
 end
