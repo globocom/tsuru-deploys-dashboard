@@ -24,7 +24,7 @@ SCHEDULER.every '10s' do
   deploys.each do |deploy|
     time = DateTime.parse deploy["Timestamp"]
     elapsed = Duration.new((deploy["Duration"]/1000000000))
-  	deploy_dates.push({label: deploy["App"], value: time.strftime("%d/%m/%y  %H:%M:%S ") << elapsed.format("%mm%ss")})
+  	deploy_dates.push({label: deploy["App"], value: time.strftime("%d/%m/%y  %H:%M:%S") << " - " << elapsed.format("%mm%ss")})
   end
   send_event('deploys', { items: deploy_dates })
 end
