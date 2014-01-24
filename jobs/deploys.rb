@@ -4,6 +4,7 @@
 
 require "json"
 require "net/http"
+require "duration"
 
 tsuru_server = ENV["TSURU_SERVER"]
 tsuru_port = ENV["TSURU_PORT"]
@@ -21,8 +22,9 @@ SCHEDULER.every '10s' do
 	response = http.request(req)
 	deploys = JSON.parse response.body
   deploys.each do |deploy|
-  time = DateTime.strptime deploy["Timestamp"],  "%Y-%m-%dT%H:%M:%S.%L%z"
-  	deploy_dates.push({label: deploy["App"], value: time.strftime("%d/%m/%y  %H:%M:%S"), value: deploy["Duration"]})
+    time = DateTime.parse deploy["Timestamp"]
+    elapsed = Duration.new((deploy["Duration"]/1000000000))
+  	deploy_dates.push({label: deploy["App"], value: time.strftime("%d/%m/%y  %H:%M:%S ") << elapsed.format("%mm%ss")})
   end
   send_event('deploys', { items: deploy_dates })
 end
